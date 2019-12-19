@@ -55,8 +55,9 @@ export default {
         ],
         check: [{
           validator: function (rule, value, callback) {
+            // value 是要校验的字段值
             if (value) {
-              callback()
+              callback() // 通过就去执行回调
             } else {
               callback(new Error('必须勾选'))
             }
