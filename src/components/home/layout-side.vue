@@ -2,10 +2,10 @@
 <div>
       <!-- 上部图标 -->
             <div class="home-aside-title">
-                <img src="../../assets/img/logo_admin.png" alt="">
+                <img src="../../assets/img/logo_admin.png" alt="" style="height:30px">
             </div>
             <!-- 这是导航 -->
-            <el-menu background-color= "#323745" text-color="#adafb5"  active-text-color="#ffd04b" style="width:231px">
+            <el-menu background-color= "#323745" text-color="#adafb5"  active-text-color="#ffd04b" style="width:231px;">
                 <el-menu-item index="1" >首页</el-menu-item>
                     <el-submenu index="2">
                             <template slot="title">内容管理</template>
@@ -35,6 +35,12 @@ export default {
 }
 </script>
 
-<style>
+<style >
+  .home-aside-title{
+                    text-align: center;
+                    padding: 10px 0;
+                    background-color: #2e2f32;
+
+                }
 
 </style>
