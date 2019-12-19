@@ -72,9 +72,26 @@ export default {
     // 手动校验,需要在e-form添加ref属性,然后添加方法
     submitLogin () {
       // 获取e-form 实例,validate是一个函数,有两个参数
-      this.$refs.myForm.validate(function (isok) {
+      this.$refs.myForm.validate((isok) => {
         if (isok) {
-          console.log('前端校验成功,准备调用接口,传到后端')
+          // 这里校验成功,就要去后台掉接口请求;$axios,post类型
+          // 这里有this,就需要把上面的函数换成箭头函数
+          this.$axios({
+            // url是后端接口给的
+            url: '/authorizations',
+            method: 'post',
+            // data是请求参数;请求参数需要mobile,code,所以直接调用loginform
+            data: this.loginForm
+          }).then(res => {
+            // 发送成功之后会返回token令牌,绑定给前端;token在data中;应该存在localstroge中,方便那下次请求使用,
+            // user_tokenshi 存储的键,后面是值
+            window.localStorage.setItem('user_token', res.data.data.token)
+            // catch是错误请求
+          }).catch(error => {
+            // error这里必须使用,所以log出来
+            console.log(error)
+          })
+          // console.log('前端校验成功,准备调用接口,传到后端')
         } else {
 
         }
