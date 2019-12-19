@@ -86,6 +86,8 @@ export default {
             // 发送成功之后会返回token令牌,绑定给前端;token在data中;应该存在localstroge中,方便那下次请求使用,
             // user_tokenshi 存储的键,后面是值
             window.localStorage.setItem('user_token', res.data.data.token)
+            // 成功之后要跳转页面到主页;
+            this.$router.push('/home')
             // catch是错误请求
           }).catch(() => {
             // error这里必须使用,所以log出来
