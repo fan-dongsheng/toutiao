@@ -87,9 +87,13 @@ export default {
             // user_tokenshi 存储的键,后面是值
             window.localStorage.setItem('user_token', res.data.data.token)
             // catch是错误请求
-          }).catch(error => {
+          }).catch(() => {
             // error这里必须使用,所以log出来
-            console.log(error)
+            // message是 element 注册的一个方法 可以直接调用
+            this.$message({
+              message: '你输入的手机号或者验证码错误',
+              type: 'warning'
+            })
           })
           // console.log('前端校验成功,准备调用接口,传到后端')
         } else {
