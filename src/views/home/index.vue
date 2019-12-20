@@ -21,14 +21,16 @@
 </template>
 
 <script>
+
+// 这里在main.js中进行了全局注册组件, 所以几不需要了;
 // 引入侧边栏
-import layoutAside from '../../components/home/layout-side'
+// import layoutAside from '../../components/home/layout-side'
 // 引入main内容的header
-import layoutHeader from '../../components/home/layout-header'
+// import layoutHeader from '../../components/home/layout-header'
 export default {
   components: {
-    'layout-side': layoutAside,
-    'layout-header': layoutHeader
+    // 'layout-side': layoutAside,
+    // 'layout-header': layoutHeader
   }
 
 }

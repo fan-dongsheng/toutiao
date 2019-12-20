@@ -6,6 +6,8 @@ import 'element-ui/lib/theme-chalk/index.css' // 引入样式
 import './styles/index.less' // 引入less
 import axios from 'axios' // 引入axios到main里
 
+import component from './components' // 这是引入component 进行全局注册,方便组件使用;
+
 // 给axios配置一个baseurl
 axios.defaults.baseURL = 'http://ttapi.research.itcast.cn/mp/v1_0'
 
@@ -14,6 +16,8 @@ Vue.prototype.$axios = axios
 
 Vue.config.productionTip = false
 Vue.use(ElementUi)
+
+Vue.use(component) // 全局注册一下,组件.
 
 new Vue({
   router,
