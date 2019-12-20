@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/home'
 import Login from '../views/login' // 引入组件
+import Home2 from '../views/home/home' // 引入二级路由
 
 Vue.use(VueRouter)
 
@@ -16,7 +17,14 @@ const routes = [
   },
   {
     path: '/home',
-    component: Home
+    component: Home,
+    children: [
+      {
+        // 二级路由 如果地址什么都不写,默认显示内容作为一级组件
+        path: '',
+        component: Home2
+      }
+    ]
   }
   // {
   //   path: '/about',
