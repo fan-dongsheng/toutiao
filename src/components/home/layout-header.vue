@@ -9,11 +9,13 @@
         <!-- 右部分 -->
          <el-col :span="4" class="right" >
             <el-row type="flex" align="middle" justify="end" class="right-img">
-
-                <img src="../../assets/img/avatar.jpg" alt="">
+                <!-- 变量加上双冒号就可以直接使用data数据了 -->
+                <!-- 这里的img由于是动态的,不会自动转成静态存储或者base64,就会报错 ,如果没有图片就要使用默认的;-->
+                <!-- 解决方法就是,先在data方法中将图片编译完成,再传过来 -->
+                <img :src="userInfo.photo ? userInfo.photo : defaultImg" alt="">
                 <el-dropdown trigger="click" class="right-loginout">
                 <span class="el-dropdown-link">
-                    不一样的烟火
+                    {{userInfo.name}}
 
                 </span>
                 <el-dropdown-menu slot="dropdown">
@@ -32,6 +34,36 @@
 
 <script>
 export default {
+  // 获取用户的头像,用户名,用user/profile接口;
+  // 需要给data一个数据用于接收 后端返回的数据 userInfo
+  data () {
+    return {
+      userInfo: {
+      },
+      // 这里是将默认图片就行编译,如果返回数据中没有图片,就要使用默认,用于获取,用require转成变量
+      defaultImg: require('../../assets/img/avatar.jpg')
+    }
+  },
+  created () {
+    // 先获取令牌
+    let token = window.localStorage.getItem('user_token')
+
+    this.$axios({
+      // url,headers都是小写;
+
+      url: '/user/profile',
+
+      // 需要传请求头参数;
+      headers: {
+        // 这里是一个请求头,需要将token令牌传入,Bearer 这个在后面有个空格
+        Authorization: `Bearer ${token}`
+
+      }
+    }).then(res => {
+      // 返回的数据在data中,将userInfo赋值
+      this.userInfo = res.data.data
+    })
+  }
 
 }
 </script>
