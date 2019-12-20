@@ -13,15 +13,17 @@
                 <!-- 这里的img由于是动态的,不会自动转成静态存储或者base64,就会报错 ,如果没有图片就要使用默认的;-->
                 <!-- 解决方法就是,先在data方法中将图片编译完成,再传过来 -->
                 <img :src="userInfo.photo ? userInfo.photo : defaultImg" alt="">
-                <el-dropdown trigger="click" class="right-loginout">
+
+                <el-dropdown trigger="click" class="right-loginout"  @command="handleCommand">
                 <span class="el-dropdown-link">
                     {{userInfo.name}}
 
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item >个人信息</el-dropdown-item>
-                    <el-dropdown-item >git地址</el-dropdown-item>
-                    <el-dropdown-item >退出</el-dropdown-item>
+                    <!-- 这里是下拉菜单的指令方法,在每个标签添加command属性; -->
+                    <el-dropdown-item command="info">个人信息</el-dropdown-item>
+                    <el-dropdown-item command="git">git地址</el-dropdown-item>
+                    <el-dropdown-item command="loginout">退出</el-dropdown-item>
 
                 </el-dropdown-menu>
                 </el-dropdown>
@@ -63,6 +65,20 @@ export default {
       // 返回的数据在data中,将userInfo赋值
       this.userInfo = res.data.data
     })
+  },
+  methods: {
+    // 用element组件 的 下拉指令,在下拉菜单添加方法指令
+    handleCommand (command) {
+      // 指令出发后要判断commond值;
+      if (command === 'loginout') {
+        // 退出,要删除token,跳转到login
+        window.localStorage.removeItem('user_token')
+        this.$router.push('/login')
+      } else if (command === 'git') {
+        // 跳转外部链接用herf
+        window.location.href = 'https://github.com/fan-dongsheng/heimatoutiao'
+      }
+    }
   }
 
 }
