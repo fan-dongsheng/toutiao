@@ -6,7 +6,8 @@ import router from './router'
 import ElementUi from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css' // 引入样式
 import './styles/index.less' // 引入less
-import axios from 'axios' // 引入axios到main里
+// 这里的axios请求,直接引入拦截的工具中的axios,带令牌的axios;
+import axios from './untils/request' // 引入axios到main里
 
 import component from './components' // 这是引入component 进行全局注册,方便组件使用;
 

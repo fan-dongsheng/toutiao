@@ -48,19 +48,21 @@ export default {
   },
   created () {
     // 先获取令牌
-    let token = window.localStorage.getItem('user_token')
+    // 这里删除原因是 因为配置了axios 拦截功能,直接就携带了令牌;请求在config中;
+    // let token = window.localStorage.getItem('user_token')
 
     this.$axios({
       // url,headers都是小写;
 
-      url: '/user/profile',
+      url: '/user/profile'
 
       // 需要传请求头参数;
-      headers: {
-        // 这里是一个请求头,需要将token令牌传入,Bearer 这个在后面有个空格
-        Authorization: `Bearer ${token}`
+      // 这里删除原因是 因为配置了axios 拦截功能,直接就携带了令牌;请求在config中;
+      // headers: {
+      //   // 这里是一个请求头,需要将token令牌传入,Bearer 这个在后面有个空格
+      //   Authorization: `Bearer ${token}`
 
-      }
+      // }
     }).then(res => {
       // 返回的数据在data中,将userInfo赋值
       this.userInfo = res.data.data
