@@ -89,14 +89,16 @@ export default {
             // 成功之后要跳转页面到主页;
             this.$router.push('/home')
             // catch是错误请求
-          }).catch(() => {
-            // error这里必须使用,所以log出来
-            // message是 element 注册的一个方法 可以直接调用
-            this.$message({
-              message: '你输入的手机号或者验证码错误',
-              type: 'warning'
-            })
           })
+          // catch删除是因为 axios统一处理错误信息;
+          // .catch(() => {
+          //   // error这里必须使用,所以log出来
+          //   // message是 element 注册的一个方法 可以直接调用
+          //   this.$message({
+          //     message: '你输入的手机号或者验证码错误',
+          //     type: 'warning'
+          //   })
+          // })
           // console.log('前端校验成功,准备调用接口,传到后端')
         } else {
 
