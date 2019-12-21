@@ -2,6 +2,8 @@
 import layoutAside from './home/layout-side'
 // 引入main内容的header
 import layoutHeader from './home/layout-header'
+// 引入面包屑组件
+import breadCrumb from './common/breadcrumb.vue'
 
 export default {
   // 这是全局注册组件的方法,调用element中的一个install方法
@@ -10,5 +12,6 @@ export default {
     // 拿到的vue对象可以注册全局组件
     Vue.component('layout-side', layoutAside)
     Vue.component('layout-header', layoutHeader)
+    Vue.component('bread-crumb', breadCrumb)
   }
 }
