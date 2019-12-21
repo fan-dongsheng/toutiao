@@ -65,7 +65,8 @@ export default {
       // }
     }).then(res => {
       // 返回的数据在data中,将userInfo赋值
-      this.userInfo = res.data.data
+      // 这里res.data 是拦截返回的是data,所以少用一个data
+      this.userInfo = res.data
     })
   },
   methods: {

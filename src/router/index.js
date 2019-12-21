@@ -24,6 +24,11 @@ const routes = [
         path: '',
         component: Home2
       }
+      // {
+      //   path:'comment',
+      //   component:()=>import('../views/')
+
+      // }
     ]
   }
   // {
