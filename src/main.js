@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
+// 引入路由守卫
+import './premission'
 import router from './router'
 import ElementUi from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css' // 引入样式
