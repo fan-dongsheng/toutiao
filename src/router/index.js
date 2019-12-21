@@ -23,22 +23,15 @@ const routes = [
         // 二级路由 如果地址什么都不写,默认显示内容作为一级组件
         path: '',
         component: Home2
+      },
+      {
+        path: 'comment', // 两种写法 完整地址 /home/comment  或者相对地址 comment
+        component: () => import('../views/comment')
       }
-      // {
-      //   path:'comment',
-      //   component:()=>import('../views/')
 
-      // }
     ]
   }
-  // {
-  //   path: '/about',
-  //   name: 'about',
-  //   // route level code-splitting
-  //   // this generates a separate chunk (about.[hash].js) for this route
-  //   // which is lazy-loaded when the route is visited.
-  //   component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  // }
+
 ]
 
 const router = new VueRouter({
