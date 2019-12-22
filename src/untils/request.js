@@ -26,7 +26,7 @@ axios.interceptors.response.use(function (response) {
   let message = ''
   switch (status) {
     case 400:
-      message = '手机号验证码错误'
+      message = '手请求参数错误'
 
       break
     case 403:
@@ -50,6 +50,8 @@ axios.interceptors.response.use(function (response) {
       break
   }
   Message({ message: message, type: 'warning' })
+  // 这里需要终止操作;
+  return Promise.reject(error)
 })
 
 // 直接将axios导出去,再引入到main.js中,供全局使用
