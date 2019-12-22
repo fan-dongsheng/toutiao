@@ -62,9 +62,10 @@ export default {
         this.$axios({
           method: 'put',
           url: '/comments/status',
-          params: { article_id: row.id },
+          // .tostring 是json-bigint中id转换是一个对象,需要转成字符串;
+          params: { article_id: row.id.toString() },
           // 这里是否需要传递参数,如果false就要打开成true
-          data: { allow_comment: !row.cnommet_status }
+          data: { allow_comment: !row.comment_status }
         }).then(res => {
           // 传递成功之后;要弹出消息提示一下;
           this.$message({

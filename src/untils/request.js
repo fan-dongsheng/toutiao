@@ -2,6 +2,7 @@
 import axios from 'axios'
 import router from '../router'
 import { Message } from 'element-ui' // 提示消息
+import JsonBig from 'json-bigint'
 // interceptors 拦截 ,这里有两个回调函数,正确执行,错误执行
 axios.interceptors.request.use(function (config) {
   // config是axios的配置信息;发送请求时使用;
@@ -13,6 +14,12 @@ axios.interceptors.request.use(function (config) {
 }, function () {
   // 这里执行失败请求
 })
+
+// 在响应数据到达响应拦截之前需要执行的函数,改变 json-bigint;
+axios.defaults.transformResponse = [function (data) {
+  // 先引入三防包,再调用,parse方法,得到对象;再将获取的数据转成字符串
+  return JsonBig.parse(data)
+}]
 
 // axios统一处理响应数据,数据返回来之后先走这里,再去接口的then,
 axios.interceptors.response.use(function (response) {
