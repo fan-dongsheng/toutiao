@@ -60,7 +60,8 @@ export default {
     changePage (newPage) {
       // newPage是当前的回调函数返回的当前页数
 
-      this.currentPage = newPage
+      this.page.currentPage = newPage
+
       this.getComment()
     },
     getComment () {
@@ -68,7 +69,7 @@ export default {
       this.loading = true
       this.$axios({
         url: '/articles',
-        params: { response_type: 'comment', per_page: this.pageSize, page: this.currentPage }
+        params: { response_type: 'comment', per_page: this.page.pageSize, page: this.page.currentPage }
       }).then(res => {
         // 返回数据res中的 文章列表获取是一个数组;results
         this.list = res.data.results// 指挥显示标题内容,  评论状态是布尔值,需要用formatter 格式化内容

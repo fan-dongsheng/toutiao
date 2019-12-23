@@ -3,12 +3,13 @@
         <bread-crumb slot="header">
             <template slot="title">素材管理</template>
         </bread-crumb>
-           <el-tabs v-model="activeName" @tab-click="changeActive">
+           <el-tabs v-model="activeName" @tab-click="changeTab"  >
 
                 <el-tab-pane label="全部素材" name="all">
                      <div class="imgAll">
 
-                 <el-card  :body-style="{ padding: '0px' }" v-for="item in list" :key="item.id" class="img-card">
+                 <el-card
+                  :body-style="{ padding: '0px' }" v-for="item in list" :key="item.id" class="img-card">
                      <img :src="item.url" alt="">
                     <div style="" class="bottom ">
 
@@ -19,12 +20,24 @@
                     </div>
                 </el-card>
                  </div>
+                 <!-- //分页 -->
+                 <el-row type="flex" justify="center" align="middle">
+                      <el-pagination
+                            @current-change='changePage'
+                            background
+                            layout="prev, pager, next"  :page-size='page.pageSize' :current-page='page.currentPage'
+                            :total="page.total">
+                    </el-pagination>
+
+                 </el-row>
+
                 </el-tab-pane>
                 <el-tab-pane label="收藏素材" name="collect" >
                      <div class="imgAll">
 
                  <el-card  :body-style="{ padding: '0px' }" v-for="item in list" :key="item.id" class="img-card">
                      <img :src="item.url" alt="">
+
                     <!-- <div style="" class="bottom ">
 
                             <i class="el-icon-star-on bottom-l"></i>
@@ -34,6 +47,18 @@
                     </div> -->
                 </el-card>
             </div>
+              <!-- //分页 -->
+                        <el-row type="flex" justify="center" align="middle">
+                      <el-pagination
+
+                            background
+                            layout="prev, pager, next"  :page-size='page.pageSize'
+                            :current-page='page.currentPage'
+                            :total="page.total"
+                            @current-change='changePage'>
+                    </el-pagination>
+
+                 </el-row>
                 </el-tab-pane>
 
             </el-tabs>
@@ -48,12 +73,27 @@ export default {
     return {
       // 激活选中name,c-model 双向绑定
       activeName: 'all',
-      list: []
+      list: [],
+      page: {
+        total: 0, // 总页数
+        pageSize: 8, // 显示几页
+        currentPage: 1 // 当前页
+
+      }
     }
   },
   methods: {
+
+    // 分页改变获取参数,当前页;
+    changePage (newPage) {
+      this.page.currentPage = newPage
+
+      this.getMaterial()
+    },
     // tabs方法,获取切换tab实例;
-    changeActive () {
+    changeTab () {
+      // 点击切换要从第一页开始查询
+      this.page.currentPage = 1
       this.getMaterial()
     },
     // 获取图片
@@ -61,10 +101,14 @@ export default {
       this.$axios({
         url: '/user/images',
         // collect改成动态的,
-        params: { collect: this.activeName === 'collect' }
+        params: { collect: this.activeName === 'collect',
+          page: this.page.currentPage,
+          per_page: this.page.pageSize }
 
       }).then(res => {
         this.list = res.data.results
+        // 获取总页数;
+        this.page.total = res.data.total_count
       })
     }
   },
