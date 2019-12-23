@@ -1,6 +1,6 @@
 <template>
         <!-- 评论组件 -->
-    <el-card>
+    <el-card v-loading="loading">
         <bread-crumb slot="header">
             <template slot="title">
                评论列表
@@ -51,7 +51,8 @@ export default {
         pageSize: 10, // 显示几页
         currentPage: 1 // 当前页数
 
-      }
+      },
+      loading: false
     }
   },
   methods: {
@@ -64,6 +65,7 @@ export default {
     },
     getComment () {
       // 掉接口get
+      this.loading = true
       this.$axios({
         url: '/articles',
         params: { response_type: 'comment', per_page: this.pageSize, page: this.currentPage }
@@ -73,6 +75,7 @@ export default {
 
         // 获取总页数
         this.page.total = res.data.total_count
+        this.loading = false
       })
     },
     // 获取评论数据

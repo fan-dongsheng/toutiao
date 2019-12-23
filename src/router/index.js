@@ -24,9 +24,15 @@ const routes = [
         path: '',
         component: Home2
       },
+      // 评论列表
       {
         path: 'comment', // 两种写法 完整地址 /home/comment  或者相对地址 comment
         component: () => import('../views/comment')
+      },
+      // 素材管理
+      {
+        path: 'material',
+        component: () => import('../views/material')
       }
 
     ]
