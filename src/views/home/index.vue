@@ -17,7 +17,7 @@
     <el-main>
       <!-- 二级路由 -->
       <router-view></router-view>
-      Main</el-main>
+      </el-main>
   </el-container>
 
 </el-container>
