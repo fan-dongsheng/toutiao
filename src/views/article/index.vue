@@ -63,15 +63,18 @@
             <span>共找到2000条符合的内容</span>
 
         </el-row>
-        <el-row v-for="item in 20" :key="item" class="content" type="flex" justify="space-between">
+        <!-- //item.id.toString 返回的id太大,需要bigjson转成字符串 -->
+        <el-row v-for="item in list" :key="item.id.toString()" class="content" type="flex" justify="space-between">
             <el-col class="left" :span="14">
 
                 <el-row class="write" type="flex">
-                    <img src="../../assets/img/404.png" alt="">
+                    <!-- //图片在cover数组中,有可能为空就会报错,所以要判断长度,为空就是默认的图片地址 -->
+                    <img :src="item.cover.images.length ? item.cover.images[0]: defaultImg" alt="">
                     <div class="mater">
-                        <span style="font-size:14px;">什么内容都而非粉丝违法未</span>
-                        <el-tag class="tag">标签一</el-tag>
-                        <span style="color:#999">2019-12-123</span>
+                        <span style="font-size:14px;">{{item.title}}</span>
+                        <!-- 抵用过滤器处理数据 -->
+                        <el-tag :type="item.status | filterType" class="tag" >{{item.status | filterStatus}}</el-tag>
+                        <span style="color:#999">{{item.pubdate}}</span>
                     </div>
 
                 </el-row>
@@ -101,10 +104,55 @@ export default {
 
       },
       // 定义一个频道空数组,勇于接受数据
-      channels: []
+      channels: [],
+      list: [],
+      defaultImg: require('../../assets/img/404.png')
+
+    }
+  },
+  filters: {
+    // 过滤器 文章状态 0-草稿，1-待审核，2-审核通过，3-审核失败，4-已删除
+    filterStatus (params) {
+      switch (params) {
+        case 0:
+          return '草稿'
+        case 1:
+          return '待审核'
+        case 2:
+          return '审核通过'
+        case 3:
+          return '审核失败'
+
+        default:
+          break
+      }
+    },
+    filterType (params) {
+      switch (params) {
+        case 0:
+          return 'warning'
+        case 1:
+          return 'info'
+        case 2:
+          return 'success'
+        case 3:
+          return 'dange'
+
+        default:
+          break
+      }
     }
   },
   methods: {
+
+    // 获取内容;
+    getArtical () {
+      this.$axios({
+        url: 'articles'
+      }).then(res => {
+        this.list = res.data.results
+      })
+    },
     // 频道列表
     getChannel () {
       this.$axios({
@@ -118,6 +166,7 @@ export default {
   },
   created () {
     this.getChannel()
+    this.getArtical()
   }
 
 }
