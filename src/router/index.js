@@ -33,6 +33,11 @@ const routes = [
       {
         path: 'material',
         component: () => import('../views/material')
+      },
+      // 内容列表
+      {
+        path: 'articles',
+        component: () => import('../views/article')
       }
 
     ]

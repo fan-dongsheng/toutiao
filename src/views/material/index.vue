@@ -19,10 +19,10 @@
                   :body-style="{ padding: '0px' }" v-for="item in list" :key="item.id" class="img-card">
                      <img :src="item.url" alt="">
                     <div style="" class="bottom ">
-
-                            <i class="el-icon-star-on bottom-l"></i>
-
-                        <i class="el-icon-delete-solid bottom-i" ></i>
+                          <!-- is_collected这个参数在获取素材的返回数据中有,收藏图标 -->
+                            <i :style="{color:item.is_collected?'red':''}" @click="collectOrCancle(item)" class="el-icon-star-on bottom-l"></i>
+                          <!-- 删除需要穿id -->
+                        <i @click="delMaterial(item.id)" class="el-icon-delete-solid bottom-i" ></i>
 
                     </div>
                 </el-card>
@@ -91,6 +91,31 @@ export default {
     }
   },
   methods: {
+    // 删除素材
+    delMaterial (id) {
+      this.$confirm('确定要删除吗?').then(() => {
+        this.loading = true
+        this.$axios({
+          url: `/user/images/${id}`,
+          method: 'delete'
+        }).then(() => {
+          this.loading = false
+          this.getMaterial()
+        })
+      })
+    },
+    // 收藏或取消;
+    collectOrCancle (row) {
+      this.$axios({
+        url: `/user/images/${row.id}`,
+        method: 'put',
+        data: {
+          collect: !row.is_collected
+        }
+      }).then(res => {
+        this.getMaterial()
+      })
+    },
     // 上传图片
     upload (params) {
       this.loading = true
@@ -168,11 +193,13 @@ export default {
             .bottom-l{
                  float: left;
                 margin-left: 10px;
+                cursor: pointer;
             }
 
             .bottom-i{
                 float: right;
                 margin-right: 10px;
+                cursor: pointer;
             }
 
         }
