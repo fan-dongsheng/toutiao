@@ -58,6 +58,32 @@
                 </el-col>
 
         </el-row>
+        <!-- 下部分文章内容 -->
+        <el-row class="total">
+            <span>共找到2000条符合的内容</span>
+
+        </el-row>
+        <el-row v-for="item in 20" :key="item" class="content" type="flex" justify="space-between">
+            <el-col class="left" :span="14">
+
+                <el-row class="write" type="flex">
+                    <img src="../../assets/img/404.png" alt="">
+                    <div class="mater">
+                        <span style="font-size:14px;">什么内容都而非粉丝违法未</span>
+                        <el-tag class="tag">标签一</el-tag>
+                        <span style="color:#999">2019-12-123</span>
+                    </div>
+
+                </el-row>
+            </el-col>
+            <el-col class="right" :span="6">
+                <el-row type="flex" justify="end" style="font-size:12px;">
+                    <i class="el-icon-edit">修改</i>
+                    <i class="el-icon-delete">删除</i>
+                </el-row>
+
+            </el-col>
+        </el-row>
 
     </el-card>
 
@@ -104,6 +130,46 @@ export default {
         height: 50px;
         padding-left: 30px;
 
+    }
+}
+.total{
+    height: 50px;
+    margin: 30px 0 10px 0;
+    border-bottom: 1px dashed #ccc;
+}
+.content {
+    margin: 10px 0;
+    border-bottom: 1px dashed #ccc;
+    padding: 10px 0;
+    .left {
+        .write{
+            img{
+                width: 180px;
+                height: 100px;
+            }
+            .mater{
+                display: flex;
+                flex-direction: column;
+                margin-left: 10px;
+                font-size: 12px;
+                //两头撑开
+                justify-content: space-between;
+                .tag{
+                    width: 60px;
+                }
+            }
+
+        }
+    }
+    .right {
+
+            .el-icon-edit{
+                margin-right: 20px;
+                 cursor: pointer;
+            }
+            .el-icon-delete{
+                 cursor: pointer;
+            }
     }
 }
 
