@@ -11,7 +11,10 @@
             </el-col>
             <el-col :span="18">
                 <!-- 文章状态，0-草稿，1-待审核，2-审核通过，3-审核失败，4-已删除，不传为全部 -->
-                <el-radio-group v-model="formData.status" :span='18'>
+                <el-radio-group
+                 @change="changeCondition"
+                 v-model="formData.status"
+                  :span='18'>
 
                 <el-radio :label="5">全部</el-radio>
                 <el-radio :label="0">草稿</el-radio>
@@ -32,8 +35,12 @@
             <el-col :span="18">
                 <!-- //定义一个空数组,再调用接口获取数据,返回数据有name,id 设置id和name,
                 数组遍历出来,设置一个空变量value,绑定到v-model,默认是空 -->
-                <el-select v-model="formData.channel_id" placeholder="请选择">
+                <el-select
+                @change="changeCondition"
+                v-model="formData.channel_id"
+                 placeholder="请选择">
                     <el-option
+
                     v-for="item in channels"
                     :key="item.id"
                     :label="item.name"
@@ -43,12 +50,15 @@
             </el-col>
 
         </el-row>
-        <el-row class="searchTool">
+        <el-row  class="searchTool">
              <el-col :span="2">
                  <span >时间选择</span>
              </el-col>
+
             <el-col :span="18">
                     <el-date-picker
+                    @change="changeCondition"
+                    value-format="yyyy-MM-dd"
                         v-model="formData.dateRange"
                         type="daterange"
                         range-separator="-"
@@ -99,7 +109,7 @@ export default {
       formData: {
         // 文章状态
         status: 5,
-        channel_id: '',
+        channel_id: null,
         dateRange: [] // 这是日期的空数组;
 
       },
@@ -112,8 +122,8 @@ export default {
   },
   filters: {
     // 过滤器 文章状态 0-草稿，1-待审核，2-审核通过，3-审核失败，4-已删除
-    filterStatus (params) {
-      switch (params) {
+    filterStatus (value) {
+      switch (value) {
         case 0:
           return '草稿'
         case 1:
@@ -127,8 +137,8 @@ export default {
           break
       }
     },
-    filterType (params) {
-      switch (params) {
+    filterType (value) {
+      switch (value) {
         case 0:
           return 'warning'
         case 1:
@@ -144,11 +154,26 @@ export default {
     }
   },
   methods: {
+    // 文章筛选;
+    changeCondition () {
+      //, 筛选,设定一个参数,包含了搜索的所有参数
+      let params = {
+        // status为5 就得穿空null
+        status: this.formData.status === 5 ? null : this.formData.status,
+        channel_id: this.formData.channel_id,
+        // 开始时间,如果长度大于0传数组为[0]的时间,
+        begin_pubdate: this.formData.dateRange.length ? this.formData.dateRange[0] : null,
+        end_pubdate: this.formData.dateRange.length > 1 ? this.formData.dateRange[1] : null
+      }
+      // 调用获取接口
+      this.getArtical(params)
+    },
 
     // 获取内容;
-    getArtical () {
+    getArtical (params) {
       this.$axios({
-        url: 'articles'
+        url: 'articles',
+        params
       }).then(res => {
         this.list = res.data.results
       })
