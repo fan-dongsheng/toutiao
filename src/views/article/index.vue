@@ -27,6 +27,7 @@
             <!-- //单选组件 -->
 
         </el-row>
+
         <el-row class="searchTool">
 
             <el-col :span="2">
@@ -97,6 +98,18 @@
 
             </el-col>
         </el-row>
+        <!-- //分页 -->
+        <el-row type="flex" justify="center">
+            <el-pagination
+              @current-change="changePage"
+              background
+              layout="prev, pager, next"
+              :current-page="pageAll.page"
+              :page-size="pageAll.per_page"
+              :total="pageAll.total_count">
+            </el-pagination>
+
+        </el-row>
 
     </el-card>
 
@@ -106,6 +119,13 @@
 export default {
   data () {
     return {
+      // 分页
+      pageAll: {
+        total_count: 100, // 文章总数
+        page: 1, // 当前页数
+        per_page: 10 // 每页数量
+
+      },
       formData: {
         // 文章状态
         status: 5,
@@ -115,7 +135,9 @@ export default {
       },
       // 定义一个频道空数组,勇于接受数据
       channels: [],
+      // 获取内容的list
       list: [],
+      // 修改图片为默认
       defaultImg: require('../../assets/img/404.png')
 
     }
@@ -154,10 +176,23 @@ export default {
     }
   },
   methods: {
+    // 分页绑定,分页需要传2个参数,公用getArtical 就要封装一个方法,用于统一使用参数;
+    changePage (newPage) {
+      this.pageAll.page = newPage
+      this.getArticalCondition()
+    },
     // 文章筛选;
     changeCondition () {
       //, 筛选,设定一个参数,包含了搜索的所有参数
+      // 筛选需要按照筛选的页数去执行所以从第一开始
+      this.pageAll.page = 1
+      this.getArticalCondition()
+    },
+    // 分页和文章筛选统一使用的参数;
+    getArticalCondition () {
       let params = {
+        page: this.pageAll.page,
+        per_page: this.pageAll.per_page,
         // status为5 就得穿空null
         status: this.formData.status === 5 ? null : this.formData.status,
         channel_id: this.formData.channel_id,
@@ -176,6 +211,8 @@ export default {
         params
       }).then(res => {
         this.list = res.data.results
+        // 分页数据绑定个page
+        this.pageAll.total_count = res.data.total_count
       })
     },
     // 频道列表
