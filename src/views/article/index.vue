@@ -223,7 +223,7 @@ export default {
     // 获取内容;
     getArtical (params) {
       this.$axios({
-        url: 'articles',
+        url: '/articles',
         params
       }).then(res => {
         this.list = res.data.results

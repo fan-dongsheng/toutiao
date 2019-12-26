@@ -34,8 +34,9 @@
 
            </el-form-item>
            <el-form-item>
-                <el-button @click="publishArtical" type="primary">发布</el-button>
-                <el-button @click="publishArtical">存入草稿</el-button>
+               <!-- //click 不传参数默认为undefined ,undefined进去方法后为false -->
+                <el-button @click="publishArtical()" type="primary">发布</el-button>
+                <el-button @click="publishArtical(true)">存入草稿</el-button>
            </el-form-item>
 
         </el-form>
@@ -67,15 +68,26 @@ export default {
         channel_id: [{ required: true, message: '频道分类不能为空' }]
 
       }
+
     }
   },
   methods: {
     // 手动校验方法;
-    publishArtical () {
+    publishArtical (draft) {
       // 通过ref获取form实例;
-      this.$refs.publishRef.validate(function (isOk) {
+      this.$refs.publishRef.validate((isOk) => {
         if (isOk) {
           console.log('校验成功')
+          // 校验成功就调用请求接口;
+          this.$axios({
+            url: '/articles',
+            method: 'post',
+            // 改进参数, 用 点击事件方法传参,过来,草稿默认为true,发表为false
+            params: { draft: draft },
+            data: this.formData
+          }).then(() => {
+            this.$router.push('articles')
+          })
         }
       })
     },
