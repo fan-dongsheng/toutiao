@@ -71,7 +71,7 @@
         </el-row>
         <!-- 下部分文章内容 -->
         <el-row class="total">
-            <span>共找到2000条符合的内容</span>
+            <span>共找到{{pageAll.total_count}}条符合的内容</span>
 
         </el-row>
         <!-- //item.id.toString 返回的id太大,需要bigjson转成字符串 -->
@@ -93,7 +93,7 @@
             <el-col class="right" :span="6">
                 <el-row type="flex" justify="end" style="font-size:12px;">
                     <i class="el-icon-edit">修改</i>
-                    <i class="el-icon-delete">删除</i>
+                    <i class="el-icon-delete" @click="delArt(item.id.toString())">删除</i>
                 </el-row>
 
             </el-col>
@@ -176,6 +176,22 @@ export default {
     }
   },
   methods: {
+    // 删除
+    delArt (id) {
+      this.$confirm('确定要删除吗?').then(() => {
+        this.$axios({
+          url: `/articles/${id}`,
+          method: 'delete'
+        }).then(res => {
+          this.$message({
+            type: 'success',
+            message: '删除成功'
+          })
+          // 删除数据没有改变页数,所以就调用刷新页数就可以
+          this.getArticalCondition()
+        })
+      })
+    },
     // 分页绑定,分页需要传2个参数,公用getArtical 就要封装一个方法,用于统一使用参数;
     changePage (newPage) {
       this.pageAll.page = newPage
