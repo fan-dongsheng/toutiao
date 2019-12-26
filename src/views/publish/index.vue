@@ -78,7 +78,7 @@ export default {
     $route: function (to, from) {
       if (Object.keys(to.params).length) {
         // 有参数=>进行响应修改
-
+        this.getArticalById(to.params.articleId)
       } else {
         // 没参数=>发布
         this.formData = {
@@ -91,7 +91,18 @@ export default {
           channel_id: null // 频道id
         }
       }
+    },
+    // watch监听 封面的变化 images, 需要监听type,通过type 判断images的图片有几张
+    'formData.cover.type': function () {
+      if (this.formData.cover.type === 0 || this.formData.cover.type === -1) {
+        this.formData.cover.images = []
+      } else if (this.formData.cover.type === 1) {
+        this.formData.cover.images = ['']
+      } else if (this.formData.cover.type === 3) {
+        this.formData.cover.images = ['', '', '']
+      }
     }
+
   },
   methods: {
     // 修改文章,获取id的方法;
