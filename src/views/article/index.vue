@@ -176,7 +176,7 @@ export default {
     }
   },
   methods: {
-    // 删除
+    // 删除只能删除草稿
     delArt (id) {
       this.$confirm('确定要删除吗?').then(() => {
         this.$axios({
