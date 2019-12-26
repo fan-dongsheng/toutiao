@@ -71,6 +71,28 @@ export default {
 
     }
   },
+  // 监听路由的变化,因为路由相同的时候,会复用组件;需要监听改变;
+  // params是to的参数,根据参数来控制,路由变化;有参数,就使用参数,没有就使用空参数
+  // Object.keys 将对象的键转为数组,判断参数的个数
+  watch: {
+    $route: function (to, from) {
+      if (Object.keys(to.params).length) {
+        // 有参数=>进行响应修改
+
+      } else {
+        // 没参数=>发布
+        this.formData = {
+          title: '', // 文章标题
+          content: '', // 文章内容
+          cover: {
+            type: 0, // 封面类型 -1:自动，0-无图，1-1张，3-3张
+            images: []
+          },
+          channel_id: null // 频道id
+        }
+      }
+    }
+  },
   methods: {
     // 手动校验方法;
     publishArtical (draft) {

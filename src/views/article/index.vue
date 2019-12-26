@@ -92,7 +92,7 @@
             </el-col>
             <el-col class="right" :span="6">
                 <el-row type="flex" justify="end" style="font-size:12px;">
-                    <i class="el-icon-edit">修改</i>
+                    <i class="el-icon-edit" @click="editArtical(item.id.toString())">修改</i>
                     <i class="el-icon-delete" @click="delArt(item.id.toString())">删除</i>
                 </el-row>
 
@@ -176,6 +176,10 @@ export default {
     }
   },
   methods: {
+    // 修改文章;跳转页面需要传id过来,这就需要用到动态路由,创建一个动态路由;
+    editArtical (id) {
+      this.$router.push(`/home/publish/${id}`)
+    },
     // 删除只能删除草稿
     delArt (id) {
       this.$confirm('确定要删除吗?').then(() => {
