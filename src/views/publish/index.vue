@@ -94,22 +94,46 @@ export default {
     }
   },
   methods: {
+    // 修改文章,获取id的方法;
+    // 修改文章思路: 1.点击修改之后,通过router.params获取id,如果有id就去修改,没有就是发布;
+    // 2.自调用获取id的方法,通过回调函数,赋值给formData数据就可以
+    // 3.获取完指定文章数据之后就需要,调用接口,点击发布,但是发布按钮和修改是同一个方法,
+    // 所以需要修改方法,判断id有就修改,没有就发布
+    getArticalById (articleId) {
+      this.$axios({
+        url: `/articles/${articleId}`
+      }).then(res => {
+        this.formData = res.data
+      })
+    },
     // 手动校验方法;
     publishArtical (draft) {
       // 通过ref获取form实例;
       this.$refs.publishRef.validate((isOk) => {
+        // 在这里就需要分成两个接口一个修改,一个发布;
         if (isOk) {
           console.log('校验成功')
           // 校验成功就调用请求接口;
+          // 先把获取的id拿过来,用来判断;
+          let { articleId } = this.$route.params
           this.$axios({
-            url: '/articles',
-            method: 'post',
-            // 改进参数, 用 点击事件方法传参,过来,草稿默认为true,发表为false
+            url: articleId ? `/articles/${articleId}` : '/articles',
+            method: articleId ? 'put' : 'post',
             params: { draft: draft },
             data: this.formData
-          }).then(() => {
-            this.$router.push('articles')
+          }).then(res => {
+            this.$router.push('/home/articles')
           })
+
+        //   this.$axios({
+        //     url: '/articles',
+        //     method: 'post',
+        //     // 改进参数, 用 点击事件方法传参,过来,草稿默认为true,发表为false
+        //     params: { draft: draft },
+        //     data: this.formData
+        //   }).then(() => {
+        //     this.$router.push('articles')
+        //   })
         }
       })
     },
@@ -123,7 +147,10 @@ export default {
     }
   },
   created () {
-    this.getChannels()
+    this.getChannels() // 获取频道列表
+    let { articleId } = this.$route.params // 用解构赋值,获取id;
+    // 判断如果有id就修改,没有就发布;
+    articleId && this.getArticalById(articleId)
   }
 
 }
