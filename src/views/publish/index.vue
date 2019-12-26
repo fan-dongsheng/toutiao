@@ -19,6 +19,7 @@
                     <el-radio :label="0">无图</el-radio>
                     <el-radio :label="-1">自动</el-radio>
                 </el-radio-group>
+                <cover-img :list="formData.cover.images"></cover-img>
             </el-form-item>
            <el-form-item prop="channel_id" label="频道:">
 
@@ -92,7 +93,7 @@ export default {
         }
       }
     },
-    // watch监听 封面的变化 images, 需要监听type,通过type 判断images的图片有几张
+    // watch监听 封面的变化 images, 需要监听type,通过type的变化来确定images的变化
     'formData.cover.type': function () {
       if (this.formData.cover.type === 0 || this.formData.cover.type === -1) {
         this.formData.cover.images = []
