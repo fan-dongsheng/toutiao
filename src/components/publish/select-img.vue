@@ -22,7 +22,14 @@
         </div>
 
       </el-tab-pane>
-      <el-tab-pane label="上传图片" name="upload"></el-tab-pane>
+      <el-tab-pane label="上传图片" name="upload">
+          <el-upload
+          :http-request="uploadImg"
+          :show-file-list="false"
+          action="" class="upload">
+              <i class="el-icon-plus" ></i>
+          </el-upload>
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -42,6 +49,20 @@ export default {
     }
   },
   methods: {
+    // 上传方法;params是自定义上传返回的数据,里面有file;
+    uploadImg (params) {
+      // 用formdata上传;
+      let form = new FormData()
+      form.append('image', params.file)
+      this.$axios({
+        url: '/user/images',
+        method: 'post',
+        data: form
+      }).then(res => {
+        // 上传方法返回的数据,要取url,给父元素传递过去;显示在祖父元素上;直接赋值clickImg的方法就可以;
+        this.$emit('tranImg', res.data.url)
+      })
+    },
     // 图片预览传递到coverimg
     clickImg (url) {
       // 接收到url就要传到父元素,谁传递就在谁的标签上写事件监听;
@@ -102,5 +123,16 @@ export default {
     justify-content: center;
     align-items: center;
 
+}
+.upload{
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .el-icon-plus{
+        font-size: 50px;
+        padding: 60px;
+        border: 1px dashed #ccc;
+    }
 }
 </style>
