@@ -8,6 +8,7 @@ import breadCrumb from './common/breadcrumb.vue'
 import { quillEditor } from 'vue-quill-editor'
 import 'quill/dist/quill.snow.css' // 富文本编辑器外部引用样式  三种样式三选一引入即可
 import coverImges from './publish' // 引入发布文章的 发布图片组件
+import selectImages from './publish/select-img.vue' // 引入图片预览组件
 
 export default {
   // 这是全局注册组件的方法,调用element中的一个install方法
@@ -19,5 +20,6 @@ export default {
     Vue.component('bread-crumb', breadCrumb)
     Vue.component('quill-editor', quillEditor)
     Vue.component('cover-img', coverImges)
+    Vue.component('select-img', selectImages)
   }
 }
