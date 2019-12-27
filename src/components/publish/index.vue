@@ -1,8 +1,8 @@
 <template>
   <div class="coverimg">
       <div class="coveritem" v-for="(item,index) in list" :key="index">
-
-          <img src="../../assets/img/pic_bg.png" alt="">
+          <!-- //地址为动态的 -->
+          <img :src="item?item :defaultImg" alt="">
 
       </div>
   </div>
@@ -12,7 +12,8 @@
 export default {
   // 父传子,传给谁,在谁的标签上加属性
   // 用props 接收父传过来的list;
-  props: ['list']
+  props: ['list'],
+  defaultImg: require('../../assets/img/pic_bg.png')
 
 }
 </script>

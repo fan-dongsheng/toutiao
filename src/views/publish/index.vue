@@ -13,7 +13,7 @@
                 <quill-editor v-model="formData.content" type="textarea" style="height:300px;" ></quill-editor>
             </el-form-item>
             <el-form-item prop="type" label="封面" style="margin-top:100px;">
-                <el-radio-group v-model="formData.cover.type">
+                <el-radio-group @change="changeType" v-model="formData.cover.type">
                     <el-radio :label="1">单图</el-radio>
                     <el-radio :label="3">三图</el-radio>
                     <el-radio :label="0">无图</el-radio>
@@ -92,9 +92,23 @@ export default {
           channel_id: null // 频道id
         }
       }
-    },
+    }
     // watch监听 封面的变化 images, 需要监听type,通过type的变化来确定images的变化
-    'formData.cover.type': function () {
+    // 由于watch监听,只要变化,images就会变为空,所以不能用,改用change
+    // 'formData.cover.type': function () {
+    //   if (this.formData.cover.type === 0 || this.formData.cover.type === -1) {
+    //     this.formData.cover.images = []
+    //   } else if (this.formData.cover.type === 1) {
+    //     this.formData.cover.images = ['']
+    //   } else if (this.formData.cover.type === 3) {
+    //     this.formData.cover.images = ['', '', '']
+    //   }
+    // }
+
+  },
+  methods: {
+    // 监控发布图片的type变化;
+    changeType () {
       if (this.formData.cover.type === 0 || this.formData.cover.type === -1) {
         this.formData.cover.images = []
       } else if (this.formData.cover.type === 1) {
@@ -102,10 +116,7 @@ export default {
       } else if (this.formData.cover.type === 3) {
         this.formData.cover.images = ['', '', '']
       }
-    }
-
-  },
-  methods: {
+    },
     // 修改文章,获取id的方法;
     // 修改文章思路: 1.点击修改之后,通过router.params获取id,如果有id就去修改,没有就是发布;
     // 2.自调用获取id的方法,通过回调函数,赋值给formData数据就可以
