@@ -5,7 +5,7 @@
           <!-- 图片预览 -->
         <div  class="select-img">
           <el-card class="tabs-img" v-for="item in list" :key="item.id">
-            <img :src="item.url" alt />
+            <img @click="clickImg(item.url)" :src="item.url" alt />
           </el-card>
         </div>
         <!-- //分页 -->
@@ -42,6 +42,16 @@ export default {
     }
   },
   methods: {
+    // 图片预览传递到coverimg
+    clickImg (url) {
+      // 接收到url就要传到父元素,谁传递就在谁的标签上写事件监听;
+      // 在父元素的子标签上添加监听事件,再接收一下;
+      // 传过去url值之后,需要绑定在images上,但它是一个由父元素传来的list数组,不能绑定,所以再传一次给coverimg祖父元素;
+      // 由于images是一个数组,不知道传给那个index,所以下标也要传过去,下标通过点击弹层传;open
+      // 传index需要在data定义一个变量接收一下,便于赋值;
+      // images传过去地址,不能直接赋值给数组,vue响应规则,需用map创新数组
+      this.$emit('tranImg', url)
+    },
     // 监听分页
     changePage (newPage) {
       this.page.currentPage = newPage // newpage是分页监听的一个回调参数

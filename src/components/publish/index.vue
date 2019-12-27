@@ -1,13 +1,14 @@
 <template>
   <div class="coverimg">
-      <div @click="openDialog" class="coveritem" v-for="(item,index) in list" :key="index">
+      <div @click="openDialog(index)" class="coveritem" v-for="(item,index) in list" :key="index">
           <!-- //地址为动态的 -->
           <img :src="item?item :defaultImg" alt="">
       </div>
        <!-- 这里是一个弹层,用来点击弹出素材框 ,弹层是给body 加的-->
           <el-dialog :visible="dialogVisible" @close="closeDialog">
               <!-- 用一个组件显示图片素材 -->
-              <select-img></select-img>
+
+              <select-img @tranImg="receiveImg"></select-img>
           </el-dialog>
   </div>
 </template>
@@ -20,14 +21,21 @@ export default {
   data () {
     return {
       defaultImg: require('../../assets/img/pic_bg.png'),
-      dialogVisible: false
-
+      dialogVisible: false,
+      indexTrans: -1 // 发布文章图片预览需要传的下标
     }
   },
   methods: {
+    // 接收子元素传来的url;
+    receiveImg (url) {
+      this.$emit('transGrand', url, this.indexTrans) // 继续传值给祖父元素;
+      // 传递完事之后要,关闭弹层;
+      this.closeDialog()
+    },
     // 图片素材弹层点击;
-    openDialog () {
+    openDialog (index) {
       this.dialogVisible = true
+      this.indexTrans = index
     },
     closeDialog () {
       this.dialogVisible = false

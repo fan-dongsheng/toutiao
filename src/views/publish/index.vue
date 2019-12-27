@@ -19,7 +19,8 @@
                     <el-radio :label="0">无图</el-radio>
                     <el-radio :label="-1">自动</el-radio>
                 </el-radio-group>
-                <cover-img :list="formData.cover.images"></cover-img>
+                <!-- //不能传参数receiveimg中 -->
+                <cover-img @transGrand="receiveImg" :list="formData.cover.images"></cover-img>
 
             </el-form-item>
            <el-form-item prop="channel_id" label="频道:">
@@ -108,6 +109,13 @@ export default {
 
   },
   methods: {
+    // 接收发布文章的url图片预览地址;
+    receiveImg (url, index) {
+      // 这里是传过来的下标和url;
+      this.formData.cover.images =
+        this.formData.cover.images.map((item, i) => { return i === index ? url : item })
+        // 赋值数组images之后需要,关闭一下弹层,在传递组件中;
+    },
     // 监控发布图片的type变化;
     changeType () {
       if (this.formData.cover.type === 0 || this.formData.cover.type === -1) {
