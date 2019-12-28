@@ -7,6 +7,7 @@
             </bread-crumb>
             <!-- 上传图片 -->
             <el-upload
+                :http-request="uploadImg"
                 class="upload-img"
                 action=""
                 :show-file-list="false">
@@ -66,6 +67,19 @@ export default {
     }
   },
   methods: {
+    // 上传图片;params这是上传自己会返回的一个参数,里面有file;
+    // 上传的是file文件,它是formdata类型的 ,需要new一个formdata对象;
+    uploadImg (params) {
+      let data = new FormData()
+      data.append('photo', params.file)
+      this.$axios({
+        url: '/user/photo',
+        method: 'patch',
+        data: data
+      }).then(res => {
+        this.formData.photo = res.data.photo
+      })
+    },
     // 手动校验整个表单;
     refInfo () {
       this.$refs.myForm.validate(
