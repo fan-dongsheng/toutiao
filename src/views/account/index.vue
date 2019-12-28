@@ -43,6 +43,7 @@
 </template>
 
 <script>
+import eventBus from '../../untils/eventBus'
 
 export default {
   data () {
@@ -78,6 +79,7 @@ export default {
         data: data
       }).then(res => {
         this.formData.photo = res.data.photo
+        eventBus.$emit('uploadSuccess') // 触发事件,监听图片
       })
     },
     // 手动校验整个表单;
@@ -94,7 +96,12 @@ export default {
               this.$message({
                 type: 'success',
                 message: '保存成功'
+
               })
+              // 保存完成,需要传递给头部个人信息;这就需要监听事件,用eventBus,创建公共实例,再引入,
+              // 触发事件$emit('随意值event',)   监听事件$on("event",function)
+              // 在监听页面需要在created之后就创建,
+              eventBus.$emit('uploadSuccess') // 触发事件
             })
           }
         })
