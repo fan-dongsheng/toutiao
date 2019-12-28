@@ -5,6 +5,7 @@
                 <template slot="title">账户信息</template>
 
             </bread-crumb>
+            <!-- 上传图片 -->
             <el-upload
                 class="upload-img"
                 action=""
@@ -12,8 +13,8 @@
                 <img :src="formData.photo ?formData.photo :defaultImg " alt="">
             </el-upload>
             <!-- //form表单 -->
-            <el-form label-width="100px" :model="formData">
-                <el-form-item  label="用户名" style="width:400px;">
+            <el-form ref="myForm" label-width="100px" :model="formData" :rules="rules">
+                <el-form-item prop="name" label="用户名" style="width:400px;">
                     <el-input v-model="formData.name"></el-input>
 
                 </el-form-item >
@@ -21,7 +22,7 @@
                         <el-input v-model="formData.intro"></el-input>
 
                 </el-form-item >
-                    <el-form-item  label="邮箱" style="width:400px;">
+                    <el-form-item prop="email" label="邮箱" style="width:400px;">
                         <el-input v-model="formData.email"></el-input>
 
                 </el-form-item >
@@ -31,7 +32,7 @@
                 </el-form-item >
 
                     <el-form-item >
-                        <el-button type="primary">保存信息</el-button>
+                        <el-button type="primary" @click="refInfo">保存信息</el-button>
 
                 </el-form-item>
             </el-form>
@@ -41,6 +42,7 @@
 </template>
 
 <script>
+
 export default {
   data () {
     return {
@@ -53,10 +55,36 @@ export default {
 
       },
       // 默认图片地址;
-      defaultImg: require('../../assets/img/404.png')
+      defaultImg: require('../../assets/img/404.png'),
+      // 校验数据;
+      rules: {
+        name: [{ required: true, message: '请输入用户名' }, { min: 1, max: 7, message: '用户名的长度为1-7' }],
+        email: [{ required: true, message: '请输入email邮箱' },
+          { pattern: /^([a-zA-Z\d])(\w|-)+@[a-zA-Z\d]+\.[a-zA-Z]{2,4}$/, mseeage: '邮箱格式不正确' }]
+
+      }
     }
   },
   methods: {
+    // 手动校验整个表单;
+    refInfo () {
+      this.$refs.myForm.validate(
+        (isOk) => {
+          if (isOk) {
+          // 校验成功调用接口;
+            this.$axios({
+              url: '/user/profile',
+              method: 'patch',
+              data: this.formData
+            }).then(() => {
+              this.$message({
+                type: 'success',
+                message: '保存成功'
+              })
+            })
+          }
+        })
+    },
     // 获取用户个人信息;
     async getUser () {
       let res = await this.$axios({
