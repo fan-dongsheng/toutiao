@@ -70,17 +70,16 @@ export default {
   methods: {
     // 上传图片;params这是上传自己会返回的一个参数,里面有file;
     // 上传的是file文件,它是formdata类型的 ,需要new一个formdata对象;
-    uploadImg (params) {
+    async uploadImg (params) {
       let data = new FormData()
       data.append('photo', params.file)
-      this.$axios({
+      let res = await this.$axios({
         url: '/user/photo',
         method: 'patch',
         data: data
-      }).then(res => {
-        this.formData.photo = res.data.photo
-        eventBus.$emit('uploadSuccess') // 触发事件,监听图片
       })
+      this.formData.photo = res.data.photo
+      eventBus.$emit('uploadSuccess') // 触发事件,监听图片
     },
     // 手动校验整个表单;
     refInfo () {

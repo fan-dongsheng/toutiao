@@ -50,18 +50,17 @@ export default {
   },
   methods: {
     // 上传方法;params是自定义上传返回的数据,里面有file;
-    uploadImg (params) {
+    async uploadImg (params) {
       // 用formdata上传;
       let form = new FormData()
       form.append('image', params.file)
-      this.$axios({
+      let res = await this.$axios({
         url: '/user/images',
         method: 'post',
         data: form
-      }).then(res => {
-        // 上传方法返回的数据,要取url,给父元素传递过去;显示在祖父元素上;直接赋值clickImg的方法就可以;
-        this.$emit('tranImg', res.data.url)
       })
+      // 上传方法返回的数据,要取url,给父元素传递过去;显示在祖父元素上;直接赋值clickImg的方法就可以;
+      this.$emit('tranImg', res.data.url)
     },
     // 图片预览传递到coverimg
     clickImg (url) {
@@ -80,18 +79,17 @@ export default {
     },
 
     // 获取所有图片数据
-    getAllImages () {
-      this.$axios({
+    async  getAllImages () {
+      let res = await this.$axios({
         url: '/user/images',
         params: { collect: false,
           page: this.page.currentPage,
           per_page: this.page.pageSize
         }
 
-      }).then(res => {
-        this.list = res.data.results
-        this.page.total = res.data.total_count
       })
+      this.list = res.data.results
+      this.page.total = res.data.total_count
     }
   },
   created () {

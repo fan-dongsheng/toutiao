@@ -64,20 +64,19 @@ export default {
 
       this.getComment()
     },
-    getComment () {
+    async getComment () {
       // 掉接口get
       this.loading = true
-      this.$axios({
+      let res = await this.$axios({
         url: '/articles',
         params: { response_type: 'comment', per_page: this.page.pageSize, page: this.page.currentPage }
-      }).then(res => {
-        // 返回数据res中的 文章列表获取是一个数组;results
-        this.list = res.data.results// 指挥显示标题内容,  评论状态是布尔值,需要用formatter 格式化内容
-
-        // 获取总页数
-        this.page.total = res.data.total_count
-        this.loading = false
       })
+      // 返回数据res中的 文章列表获取是一个数组;results
+      this.list = res.data.results// 指挥显示标题内容,  评论状态是布尔值,需要用formatter 格式化内容
+
+      // 获取总页数
+      this.page.total = res.data.total_count
+      this.loading = false
     },
     // 获取评论数据
     formatterCont (row, column, cellValue, index) {
@@ -86,29 +85,25 @@ export default {
       return cellValue ? '正常' : '关闭'
     },
     // 打开或者关闭评论的方法,穿一个参数row,因为需要根据当前的状态去改变;
-    openORclose (row) {
+    async openORclose (row) {
       // 点击确认一下;确认
       let mess = row.comment_status ? '关闭' : '打开' // 状太
-      this.$confirm(`你确定要${mess}吗`).then(() => {
-        this.$axios({
-          method: 'put',
-          url: '/comments/status',
-          // .tostring 是json-bigint中id转换是一个对象,需要转成字符串;
-          params: { article_id: row.id.toString() },
-          // 这里是否需要传递参数,如果false就要打开成true
-          data: { allow_comment: !row.comment_status }
-        }).then(res => {
-          // 传递成功之后;要弹出消息提示一下;
-          this.$message({
-            type: 'success',
-            message: '操作成功'
-          })
-          this.getComment()
-        })
-      }
-        // body 内容  需要传data里;query 参数,传到params
-
-      )
+      await this.$confirm(`你确定要${mess}吗`)
+      await this.$axios({
+        method: 'put',
+        url: '/comments/status',
+        // .tostring 是json-bigint中id转换是一个对象,需要转成字符串;
+        params: { article_id: row.id.toString() },
+        // 这里是否需要传递参数,如果false就要打开成true
+        data: { allow_comment: !row.comment_status }
+      })
+      // 传递成功之后;要弹出消息提示一下;
+      this.$message({
+        type: 'success',
+        message: '操作成功'
+      })
+      this.getComment()
+      // body 内容  需要传data里;query 参数,传到params
     }
   },
   created () {

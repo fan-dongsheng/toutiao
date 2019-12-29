@@ -116,6 +116,7 @@
 </template>
 
 <script>
+import { getArtical, getChannel } from '../../action/articles'
 export default {
   data () {
     return {
@@ -181,20 +182,18 @@ export default {
       this.$router.push(`/home/publish/${id}`)
     },
     // 删除只能删除草稿
-    delArt (id) {
-      this.$confirm('确定要删除吗?').then(() => {
-        this.$axios({
-          url: `/articles/${id}`,
-          method: 'delete'
-        }).then(res => {
-          this.$message({
-            type: 'success',
-            message: '删除成功'
-          })
-          // 删除数据没有改变页数,所以就调用刷新页数就可以
-          this.getArticalCondition()
-        })
+    async delArt (id) {
+      await this.$confirm('确定要删除吗?')
+      await this.$axios({
+        url: `/articles/${id}`,
+        method: 'delete'
       })
+      this.$message({
+        type: 'success',
+        message: '删除成功'
+      })
+      // 删除数据没有改变页数,所以就调用刷新页数就可以
+      this.getArticalCondition()
     },
     // 分页绑定,分页需要传2个参数,公用getArtical 就要封装一个方法,用于统一使用参数;
     changePage (newPage) {
@@ -225,25 +224,29 @@ export default {
     },
 
     // 获取内容;
-    getArtical (params) {
-      this.$axios({
-        url: '/articles',
-        params
-      }).then(res => {
-        this.list = res.data.results
-        // 分页数据绑定个page
-        this.pageAll.total_count = res.data.total_count
-      })
+    async getArtical (params) {
+      let res = await getArtical(params)
+      // let res = await this.$axios({
+      //   url: '/articles',
+      //   params
+      // })
+      this.list = res.data.results
+      // 分页数据绑定个page
+      this.pageAll.total_count = res.data.total_count
     },
     // 频道列表
-    getChannel () {
-      this.$axios({
-        url: '/channels'
-
-      }).then(res => {
-        this.channels = res.data.channels
-      })
+    async getChannel () {
+      let res = await getChannel()
+      this.channels = res.data.channels
     }
+    // 改装,封装起来
+    // async getChannel () {
+    //   let res = await this.$axios({
+    //     url: '/channels'
+
+    //   })
+    //   this.channels = res.data.channels
+    // }
 
   },
   created () {
