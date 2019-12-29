@@ -1,18 +1,17 @@
 <template>
   <div class="coverimg">
-      <div @click="openDialog(index)" class="coveritem" v-for="(item,index) in list" :key="index">
-          <!-- //地址为动态的 -->
-          <img :src="item?item :defaultImg" alt="">
-      </div>
-       <!-- 这里是一个弹层,用来点击弹出素材框 ,弹层是给body 加的-->
-          <el-dialog :visible="dialogVisible" @close="closeDialog">
-              <!-- 用一个组件显示图片素材 -->
+    <div @click="openDialog(index)" class="coveritem" v-for="(item,index) in list" :key="index">
+      <!-- //地址为动态的 -->
+      <img :src="item?item :defaultImg" alt />
+    </div>
+    <!-- 这里是一个弹层,用来点击弹出素材框 ,弹层是给body 加的-->
+    <el-dialog :visible="dialogVisible" @close="closeDialog">
+      <!-- 用一个组件显示图片素材 -->
 
-              <select-img @tranImg="receiveImg"></select-img>
-          </el-dialog>
+      <select-img @tranImg="receiveImg"></select-img>
+    </el-dialog>
   </div>
 </template>
-
 <script>
 export default {
   // 父传子,传给谁,在谁的标签上加属性
@@ -41,26 +40,23 @@ export default {
       this.dialogVisible = false
     }
   }
-
 }
 </script>
 <style lang="less" scoped>
-.coverimg{
-    display: flex;
-    margin-top: 30px;
-    .coveritem{
-        width: 240px;
-        height: 240px;
-        border: 1px solid #ccc;
-        box-sizing: border-box;
-        padding: 5px;
-        margin: 5px;
-        img{
-            width: 100%;
-            height: 100%;
-        }
-
+.coverimg {
+  display: flex;
+  margin-top: 30px;
+  .coveritem {
+    width: 240px;
+    height: 240px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    padding: 5px;
+    margin: 5px;
+    img {
+      width: 100%;
+      height: 100%;
     }
+  }
 }
-
 </style>
