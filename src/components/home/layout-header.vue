@@ -3,7 +3,7 @@
     <el-row type="flex" justify="space-between" class="layoutHeader" align="middle">
         <!-- 左部分 -->
         <el-col :span="7" class="left" type="flex" >
-           <i class="el-icon-s-unfold"></i>
+           <i style="font-size:22px;cursor:pointer;" @click="changeFlod" :class="{'el-icon-s-fold':flod,'el-icon-s-unfold':!flod}"></i>
            <span>江苏传智播客教育科技股份有限公司</span>
         </el-col>
         <!-- 右部分 -->
@@ -38,10 +38,13 @@
 import eventBus from '../../untils/eventBus'
 export default {
 
-  // 获取用户的头像,用户名,用user/profile接口;
-  // 需要给data一个数据用于接收 后端返回的数据 userInfo
   data () {
     return {
+      // 折叠侧边栏,需要设置一个属性,默认false;
+      flod: false,
+
+      // 获取用户的头像,用户名,用user/profile接口;
+      // 需要给data一个数据用于接收 后端返回的数据 userInfo
       userInfo: {
       },
       // 这里是将默认图片就行编译,如果返回数据中没有图片,就要使用默认,用于获取,用require转成变量
@@ -57,7 +60,13 @@ export default {
       this.getInfo()
     })
   },
+
   methods: {
+    // 折叠侧边栏方法;
+    changeFlod () {
+      this.flod = !this.flod
+      eventBus.$emit('flodChange')
+    },
     // 获取用户个人信息封装;
     getInfo () {
     // 先获取令牌
@@ -124,6 +133,7 @@ export default {
          }
          .right-loginout{
              margin-left: 5px;
+
          }
      }
 }

@@ -2,8 +2,8 @@
 <!-- //页面布局,分为左右两部分,页面再分为上下两部分 -->
 <el-container class="home-container">
     <!-- 侧边栏部分 -->
-    <el-aside  class="home-aside" width="230px">
-      <layout-side/>
+    <el-aside  class="home-aside" style="transition:all 0.3s" :width="flod?'61px':'231px'">
+      <layout-side @flodChanges="changeFlod" />
     </el-aside>
 
     <!-- 主内容部分,这个contaiter是main容器,分为上下两部分 -->
@@ -32,9 +32,19 @@
 // 引入main内容的header
 // import layoutHeader from '../../components/home/layout-header'
 export default {
+  data () {
+    return {
+      flod: false
+    }
+  },
   components: {
     // 'layout-side': layoutAside,
     // 'layout-header': layoutHeader
+  },
+  methods: {
+    changeFlod () {
+      this.flod = !this.flod
+    }
   }
 
 }
